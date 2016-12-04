@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset=UTF-8>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <title>Advent 1</title>
+
+  <script type="text/javascript">
+
+  var calculateJourney = function() {
+
+    var journey = "";
+    var journeyArray = [];
+    var bearing = 0;
+    var bearingsArray = ["north","west","south","east"];
+    var bearingsArrayLength = bearingsArray.length;
+    var distanceNorth = 0;
+    var distanceWest = 0;
+    var distanceSouth = 0;
+    var distanceEast = 0;
+
+    //bring in list of journey steps from external file
+    var input = new XMLHttpRequest();
+    input.open('GET', './advent-input-1.txt');
+    input.onreadystatechange = function() {
+      if (input.readyState === 4 && input.status === 200) {
+        journey = input.responseText;
+        getJourneyLength(journey);
+      }      
+    };
+    input.send();
+
+    var getJourneyLength = function(journey) {
+
+      journeyArray = journey.split(',');
+        for (var i=0, maxi=journeyArray.length; i<maxi; i++) {
+          var step = journeyArray[i].trim();
+          var stepDirection = step.substring(0,1);
+          var stepDistance = parseInt(step.substring(1));
+
+          if (stepDirection == "L") {
+            bearing += 1;
+          } else if (stepDirection == "R") {
+            bearing -= 1;
+          }
+
+          var bearingsIndex = (bearing%bearingsArrayLength + bearingsArrayLength)%bearingsArrayLength;
+
+          if (bearingsIndex == 0) {
+            distanceNorth += stepDistance;
+          } else if (bearingsIndex == 1) {
+            distanceWest += stepDistance;
+          } else if (bearingsIndex == 2) {
+            distanceSouth += stepDistance;
+          } else if (bearingsIndex == 3) {
+            distanceEast += stepDistance;
+          };
+
+        }
+
+        var finalXaxisDistance = Math.abs(distanceNorth - distanceSouth);
+        var finalYaxisDistance = Math.abs(distanceWest - distanceEast);
+
+        var finalJourneyDistance = (finalXaxisDistance + finalYaxisDistance);
+
+        console.log(finalJourneyDistance);
+
+      }
+
+  }();
+
+  </script>
+
+  </head>
+  <body>
+    <div></div>
+  </body>
+</html>
