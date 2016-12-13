@@ -20,6 +20,12 @@
     var distanceSouth = 0;
     var distanceEast = 0;
 
+    var positionX = 0;
+    var positionY = 0;
+    var visitedPoint = "";
+    var visitedPointsArray = [];
+    //var maxk = 0;
+
     //bring in list of journey steps from external file
     var input = new XMLHttpRequest();
     input.open('GET', './advent-input-1.txt');
@@ -34,6 +40,9 @@
     var getJourneyLength = function(journey) {
 
       journeyArray = journey.split(',');
+
+      //for each step of journey
+
         for (var i=0, maxi=journeyArray.length; i<maxi; i++) {
           var step = journeyArray[i].trim();
           var stepDirection = step.substring(0,1);
@@ -57,14 +66,67 @@
             distanceEast += stepDistance;
           };
 
-        }
+          //get each point visited in each journey
+          loop1: 
+          for (var j=1, maxj=stepDistance; j<=maxj; j++) {
+            if (bearingsIndex == 0) {
+              positionY++;
+            } else if (bearingsIndex == 1) {
+              positionX--;
+            } else if (bearingsIndex == 2) {
+              positionY--;
+            } else if (bearingsIndex == 3) {
+              positionX++;
+            };
+            
+            //How many blocks away is the first location you visit twice? 
+            visitedPoint = (positionX+", "+positionY);
+                           
+console.log(visitedPointsArray.length);          
+    visitedPointsArrayLength = visitedPointsArray.length;
+
+            if (visitedPointsArrayLength==0) {
+console.log("vpa.l=0: i = "+i+", j = "+j+", maxk = "+maxk);
+              visitedPointsArray.push(visitedPoint);
+            } else {
+
+            while (visitedPointsArrayLength<3) { // TEMP WHILE
+
+              loop2:
+              for (var k=0, maxk=visitedPointsArrayLength; k<maxk; k++) {
+
+console.log("else: i = "+i+", j = "+j+", k = "+k+", maxk = "+maxk);
+console.log("("+visitedPointsArray[k]+"), ("+visitedPoint+")");
+
+    var thisVisitedPoint = visitedPointsArray[k];
+
+                 if(thisVisitedPoint !== visitedPoint) {
+                                      visitedPointsArray.push(visitedPoint);
+
+                    //continue;
+                  } else {
+                    console.log("push");
+
+                   visitedPointsArray.push(visitedPoint);
+                    var result = (Math.abs(positionX)+Math.abs(positionY));
+                    console.log("Previously visited point: (" + visitedPoint + "), " + result + " blocks away.");
+                  };
+                };
+              
+              }; // TEMP WHILE
+            };
+  //localhost/~judeGibbons/advent of code/advent-1.html
+          
+            //}; checkVisitedPoints();
+          };
+        };
 
         var finalXaxisDistance = Math.abs(distanceNorth - distanceSouth);
         var finalYaxisDistance = Math.abs(distanceWest - distanceEast);
 
         var finalJourneyDistance = (finalXaxisDistance + finalYaxisDistance);
 
-        console.log(finalJourneyDistance);
+        //console.log(finalJourneyDistance);  //ANSWER TO 1a//
 
       }
 
