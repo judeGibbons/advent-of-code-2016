@@ -44,7 +44,7 @@
       journeyArray = journey.split(',');
 
       //for each step of journey
-
+        loop1:
         for (var i=0, maxi=journeyArray.length; i<maxi; i++) {
           var step = journeyArray[i].trim();
           var stepDirection = step.substring(0,1);
@@ -68,10 +68,8 @@
             distanceEast += stepDistance;
           };
 
-
-
-          //get each point visited in each journey
-          loop1: 
+          //get each point visited in each step of the journey 
+          loop2:
           for (var j=1, maxj=stepDistance; j<=maxj; j++) {
             if (bearingsIndex == 0) {
               positionY++;
@@ -85,19 +83,20 @@
           
             //How many blocks away is the first location you visit twice? 
             visitedPoint = (positionX+", "+positionY);
-
             visitedPointsArrayLength = visitedPointsArray.length;
 
-
+            
             if (visitedPointsArrayLength==0) {
               visitedPointsArray.push(visitedPoint);
             } else {
-              for (var k=0, maxk=visitedPointsArrayLength; k<=maxk; k++) {
-                if(visitedPointsArray[k] == visitedPoint) {
-                  firstRevisitedPoint = visitedPointsArray[k];
-                  //break; 
+              for (var k=0, maxk=visitedPointsArrayLength-1; k<=maxk; k++) {
+                if (visitedPointsArray[k] == visitedPoint) {
+                  firstRevisitedPoint = visitedPoint;
+                  break loop1;
                 } else if (k == maxk) {
-                  visitedPointsArray.push(visitedPoint);
+                  visitedPointsArray.push(visitedPoint);                 
+                } else {
+                  continue;
                 };
               };
             };
@@ -107,16 +106,12 @@
 
         var finalXaxisDistance = Math.abs(distanceNorth - distanceSouth);
         var finalYaxisDistance = Math.abs(distanceWest - distanceEast);
-
         var finalJourneyDistance = (finalXaxisDistance + finalYaxisDistance);
+        console.log("Final distance is " + finalJourneyDistance + " blocks.");  //ANSWER TO 1a
+        // second lot of code broke this - this has now changed from 301 to 275
+
 
         var distanceToFirstRevisitedPoint = Math.abs((firstRevisitedPoint.split(", "))[0])+Math.abs((firstRevisitedPoint.split(", "))[1]);
-
-        console.log(Math.abs((firstRevisitedPoint.split(", "))[0]));
-        console.log(Math.abs((firstRevisitedPoint.split(", "))[1]));
-
-        console.log("Final distance is " + finalJourneyDistance + " blocks.");  //ANSWER TO 1a//
-        console.log(firstRevisitedPoint);
         console.log("Distance to first revisited point is " + distanceToFirstRevisitedPoint + " blocks.");  //ANSWER TO 1b//
       }
 
